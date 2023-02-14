@@ -1,3 +1,40 @@
+<script setup>
+import {useStore} from 'vuex'
+import {onMounted,watch,nextTick,computed,ref} from 'vue'
+import Swiper from 'swiper'
+const store = useStore()
+const cur =ref(null)
+const bannerList = computed(()=> store.state.home.bannerList)
+watch(bannerList,()=>{
+  nextTick(()=>{
+    const mySwiper = new Swiper (cur.value, {
+      loop: true, // 循环模式选项
+
+      // 如果需要分页器
+      pagination: {
+        el: '.swiper-pagination',
+        clickable:true
+      },
+
+      // 如果需要前进后退按钮
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+
+      // 如果需要滚动条
+      scrollbar: {
+        el: '.swiper-scrollbar',
+      },
+    })
+  })
+})
+
+onMounted(()=>{
+  store.dispatch("bannerList")
+})
+</script>
+
 <template>
   <!--列表-->
   <div class="list-container">
@@ -102,51 +139,8 @@
 </template>
 
 <script>
-import {useStore,mapState} from 'vuex'
-import {onMounted,watch,nextTick,computed,ref} from 'vue'
-import Swiper from 'swiper'
-
 export default {
   name: "index",
-  setup(){
-    const store = useStore()
-    const cur =ref(null)
-
-    const bannerList = computed(()=> store.state.home.bannerList)
-
-    onMounted(()=>{
-      store.dispatch("bannerList")
-    })
-
-    watch(bannerList,()=>{
-      nextTick(()=>{
-        const mySwiper = new Swiper (cur.value, {
-          loop: true, // 循环模式选项
-
-          // 如果需要分页器
-          pagination: {
-            el: '.swiper-pagination',
-            clickable:true
-          },
-
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          },
-
-          // 如果需要滚动条
-          scrollbar: {
-            el: '.swiper-scrollbar',
-          },
-        })
-      })
-    })
-
-    return{
-      bannerList,cur
-    }
-  },
 }
 </script>
 

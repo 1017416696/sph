@@ -1,3 +1,35 @@
+<script setup>
+import {ref,watch,nextTick} from 'vue'
+import Swiper from 'swiper'
+const props = defineProps(['list'])
+const list = props.list
+const cur = ref(null)
+watch(list,()=>{
+  nextTick(()=>{
+    const mySwiper = new Swiper (cur.value, {
+      loop: true, // 循环模式选项
+
+      // 如果需要分页器
+      pagination: {
+        el: '.swiper-pagination',
+        clickable:true
+      },
+
+      // 如果需要前进后退按钮
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+
+      // 如果需要滚动条
+      scrollbar: {
+        el: '.swiper-scrollbar',
+      },
+    })
+  })
+},{immediate:true})
+</script>
+
 <template>
   <div class="floor">
     <div class="py-container">
@@ -65,44 +97,8 @@
 </template>
 
 <script>
-import {ref,watch,nextTick} from 'vue'
-import Swiper from 'swiper'
 export default {
-  name: "index",
-  props:['list'],
-  setup(props){
-    const cur = ref(null)
-    const list = props.list
-    watch(()=>props.list,()=>{
-      nextTick(()=>{
-        const mySwiper = new Swiper (cur.value, {
-          loop: true, // 循环模式选项
-
-          // 如果需要分页器
-          pagination: {
-            el: '.swiper-pagination',
-            clickable:true
-          },
-
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-          },
-
-          // 如果需要滚动条
-          scrollbar: {
-            el: '.swiper-scrollbar',
-          },
-        })
-      })
-    },{immediate:true})
-
-
-    return{
-      cur,list
-    }
-  }
+  name: "index"
 }
 </script>
 
