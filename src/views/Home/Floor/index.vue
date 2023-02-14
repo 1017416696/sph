@@ -1,33 +1,35 @@
 <script setup>
-import {ref,watch,nextTick} from 'vue'
+import {ref,watch,nextTick,reactive,computed} from 'vue'
 import Swiper from 'swiper'
-const props = defineProps(['list'])
-const list = props.list
-const cur = ref(null)
-watch(list,()=>{
-  nextTick(()=>{
-    const mySwiper = new Swiper (cur.value, {
-      loop: true, // 循环模式选项
-
-      // 如果需要分页器
-      pagination: {
-        el: '.swiper-pagination',
-        clickable:true
-      },
-
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-
-      // 如果需要滚动条
-      scrollbar: {
-        el: '.swiper-scrollbar',
-      },
-    })
-  })
-},{immediate:true})
+import Carousel from "@/components/Carousel/index.vue";
+defineProps(['list'])
+//const floorList = computed(()=> props.list)
+//console.log(list)
+//const cur = ref(null)
+//watch(list,()=>{
+//  nextTick(()=>{
+//    const mySwiper = new Swiper (cur.value, {
+//      loop: true, // 循环模式选项
+//
+//      // 如果需要分页器
+//      pagination: {
+//        el: '.swiper-pagination',
+//        clickable:true
+//      },
+//
+//      // 如果需要前进后退按钮
+//      navigation: {
+//        nextEl: '.swiper-button-next',
+//        prevEl: '.swiper-button-prev',
+//      },
+//
+//      // 如果需要滚动条
+//      scrollbar: {
+//        el: '.swiper-scrollbar',
+//      },
+//    })
+//  })
+//},{immediate:true})
 </script>
 
 <template>
@@ -54,19 +56,21 @@ watch(list,()=>{
             </div>
 
             <div class="floorBanner">
-              <div class="swiper-container" ref="cur">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide" v-for="(carousel,index) in list.carouselList" :key="carousel.id">
-                    <img :src="carousel.imgUrl"/>
-                  </div>
-                </div>
-                <!-- 如果需要分页器 -->
-                <div class="swiper-pagination"></div>
+              <Carousel :carousel-list="list.carouselList" />
+<!--              <div class="swiper-container" ref="cur">-->
+<!--                <div class="swiper-wrapper">-->
+<!--                  <div class="swiper-slide" v-for="(carousel,index) in list.carouselList" :key="carousel.id">-->
+<!--                    <img :src="carousel.imgUrl"/>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                &lt;!&ndash; 如果需要分页器 &ndash;&gt;-->
+<!--                <div class="swiper-pagination"></div>-->
 
-                <!-- 如果需要导航按钮 -->
-                <div class="swiper-button-prev"></div>
-                <div class="swiper-button-next"></div>
-              </div>
+<!--                &lt;!&ndash; 如果需要导航按钮 &ndash;&gt;-->
+<!--                <div class="swiper-button-prev"></div>-->
+<!--                <div class="swiper-button-next"></div>-->
+<!--              </div>-->
+
             </div>
             <div class="split">
               <span class="floor-x-line"></span>
