@@ -3,6 +3,8 @@ import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 //console.log(nprogress)
 
+import store from "@/store/index.js";
+
 // requests 就是 axios 实例
 const requests = axios.create({
     //配置对象
@@ -19,6 +21,17 @@ requests.interceptors.request.use((config)=>{
 
     //出现进度条
     nprogress.start()
+
+    //在请求头中添加规定好的请求头 userTempId(后端规定好的)
+    if (store.state.detail.uuid_token){
+        config.headers.userTempId = store.state.detail.uuid_token
+    }
+
+    //后端规定好的 token 请求头
+    if (store.state.user.token){
+       config.headers.token = store.state.user.token
+    }
+
     return config
 })
 

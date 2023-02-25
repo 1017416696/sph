@@ -1,12 +1,27 @@
 <script setup>
 import {useRouter,useRoute} from "vue-router";
-import {ref} from "vue"
+import {ref, onMounted, computed} from "vue"
+import eventBus from "@/bus/eventBus.js";
+import {useStore} from "vuex";
 
 const router = useRouter()
 const route = useRoute()
+const store = useStore()
 const keyword = ref('')
-console.log(keyword.value)
+//console.log(keyword.value)
+const userInfo = computed(()=>store.state.user.userInfo)
 
+//注销用户
+const userLogout =async function (){
+  try {
+    //向服务器发请求，服务器清除 token
+    // 清空本地 token 以及 userInfo
+    await store.dispatch('userLogout')
+    router.push('/home')
+  }catch (e){
+    alert(e.message)
+  }
+}
 
 const goSearch = function (){
 //  router.push('/search/' + keyword.value + '?k=cxf')
@@ -22,6 +37,15 @@ const goSearch = function (){
   }
   router.push(location)
 }
+
+onMounted(()=>{
+  //在组件挂载完成后就要监听 clear 事件
+  eventBus.on('clear',()=>{
+    keyword.value = ''
+  })
+})
+
+
 </script>
 
 
@@ -33,11 +57,16 @@ const goSearch = function (){
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="!userInfo.nickName">
             <span>请</span>
             <router-link to="/login">登陆</router-link>
             <span>|</span>
             <router-link to="/register">免费注册</router-link>
+          </p>
+          <p v-else>
+            <router-link to="/login">{{userInfo.nickName}}</router-link>
+            <span>|</span>
+            <a @click="userLogout">退出登录</a>
           </p>
         </div>
         <div class="typeList">

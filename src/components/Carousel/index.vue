@@ -1,5 +1,5 @@
 <script setup>
-import {ref,reactive,watch,nextTick} from 'vue'
+import {ref,watch,nextTick} from 'vue'
 import Swiper from 'swiper'
 const cur = ref(null)
 const props = defineProps({
@@ -11,6 +11,8 @@ watch(()=>props.carouselList,()=>{
   nextTick(()=>{
     const mySwiper = new Swiper (cur.value, {
       loop: true, // 循环模式选项
+
+      autoplay:true,
 
       // 如果需要分页器
       pagination: {

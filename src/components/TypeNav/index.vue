@@ -160,6 +160,7 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
+      cursor: pointer;
 
       .all-sort-list2 {
         .item {

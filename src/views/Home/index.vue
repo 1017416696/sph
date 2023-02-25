@@ -26,8 +26,11 @@ export default {
   setup(){
     const store = useStore()
     const floorList = computed(()=> store.state.home.floorList)
+    const userInfo = computed(()=> store.state.user.userInfo)
     onMounted(()=>{
       store.dispatch('floorList')
+      //获取用户信息在首页展示
+//      store.dispatch('getUserInfo')
     })
     return{
       floorList

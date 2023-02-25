@@ -1,7 +1,6 @@
 <script setup>
 import {ref,watch,nextTick,reactive,computed} from 'vue'
 import Swiper from 'swiper'
-import Carousel from "@/components/Carousel/index.vue";
 defineProps(['list'])
 //const floorList = computed(()=> props.list)
 //console.log(list)

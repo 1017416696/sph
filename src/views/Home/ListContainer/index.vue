@@ -1,34 +1,9 @@
 <script setup>
 import {useStore} from 'vuex'
-import {onMounted,watch,nextTick,computed,ref} from 'vue'
-import Swiper from 'swiper'
+import {onMounted,computed} from 'vue'
 const store = useStore()
-//const cur =ref(null)
 const bannerList = computed(()=> store.state.home.bannerList)
-//watch(bannerList,()=>{
-//  nextTick(()=>{
-//    const mySwiper = new Swiper (cur.value, {
-//      loop: true, // 循环模式选项
-//
-//      // 如果需要分页器
-//      pagination: {
-//        el: '.swiper-pagination',
-//        clickable:true
-//      },
-//
-//      // 如果需要前进后退按钮
-//      navigation: {
-//        nextEl: '.swiper-button-next',
-//        prevEl: '.swiper-button-prev',
-//      },
-//
-//      // 如果需要滚动条
-//      scrollbar: {
-//        el: '.swiper-scrollbar',
-//      },
-//    })
-//  })
-//})
+console.log(bannerList)
 
 onMounted(()=>{
   store.dispatch("bannerList")
@@ -41,20 +16,6 @@ onMounted(()=>{
     <div class="sortList clearfix">
       <div class="center">
         <Carousel :carousel-list="bannerList"/>
-        <!--banner轮播-->
-<!--        <div class="swiper-container" ref="cur">-->
-<!--          <div class="swiper-wrapper">-->
-<!--            <div class="swiper-slide" v-for="(carousel,index) in bannerList" :key="carousel.id">-->
-<!--              <img :src="carousel.imgUrl"/>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          &lt;!&ndash; 如果需要分页器 &ndash;&gt;-->
-<!--          <div class="swiper-pagination"></div>-->
-
-<!--          &lt;!&ndash; 如果需要导航按钮 &ndash;&gt;-->
-<!--          <div class="swiper-button-prev"></div>-->
-<!--          <div class="swiper-button-next"></div>-->
-<!--        </div>-->
       </div>
       <div class="right">
         <div class="news">
