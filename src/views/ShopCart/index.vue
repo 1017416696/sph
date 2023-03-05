@@ -2,7 +2,11 @@
 import {onMounted,computed,ref,nextTick} from 'vue'
 import {useStore} from 'vuex'
 import throttle from 'lodash/throttle'
+import eventBus from "@/bus/eventBus.js";
+import {getToken} from "@/utils/token.js";
+import {useRouter} from "vue-router";
 const store = useStore()
+const router = useRouter()
 const getData = function (){
   store.dispatch('shopCartList')
 }
@@ -56,6 +60,13 @@ const isAllChecked = computed(()=>{
 const newArr = computed(()=>{
   return carInfo.value.filter(item=>item.isChecked == 1)
 })
+
+const sumTotalPrice = function (){
+//  eventBus.emit('sendCartInfo','111')
+  sessionStorage.setItem('CheckedItem',JSON.stringify(newArr.value))
+  router.push('/trade')
+}
+
 //商品的总数
 const totalNum = computed(()=>{
   return newArr.value.length
@@ -68,6 +79,9 @@ const totalPrice = computed(()=>{
     return accumulator
   },0)
 })
+
+//判断是否登录
+const isLogin = ref(getToken())
 
 
 //删除购物车产品
@@ -107,7 +121,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="cart" v-show="carInfo.length>0">
+  <div class="cart" v-show="carInfo.length > 0">
     <h4>全部商品</h4>
     <div class="cart-main">
       <div class="cart-th">
@@ -128,7 +142,7 @@ onMounted(()=>{
               <div class="item-msg" >{{cartIn.skuName}}</div>
             </li>
             <li class="cart-list-con4">
-              <span class="price">¥ {{cartIn.cartPrice.toFixed(2)}}</span>
+              <span class="price">¥ {{(cartIn.cartPrice)}}</span>
             </li>
 
             <li class="cart-list-con5">
@@ -145,7 +159,7 @@ onMounted(()=>{
             </li>
 
             <li class="cart-list-con6">
-              <span class="sum">¥ {{(cartIn.cartPrice * cartIn.skuNum).toFixed(2)}}</span>
+              <span class="sum">¥ {{(cartIn.cartPrice * cartIn.skuNum)}}</span>
             </li>
             <li class="cart-list-con7">
               <a @click="deleteCart(cartIn.skuId)" class="sindelet">删除</a>
@@ -171,16 +185,19 @@ onMounted(()=>{
           <span>{{totalNum}}</span>件商品</div>
         <div class="sumprice">
           <em>总价（不含运费):</em>
-          <i class="summoney">¥ {{totalPrice.toFixed(2)}} 元</i>
+          <i class="summoney">¥ {{totalPrice ? totalPrice.toFixed(2) : 0}} 元</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <a class="sum-btn" @click="sumTotalPrice">结算</a>
         </div>
       </div>
     </div>
   </div>
+
   <div class="cart" v-show="carInfo.length == 0" style="height: 220px;text-align: center;">
     购物车空空的哦~，去看看心仪的商品吧~
+    <el-button v-show="isLogin == null" @click="router.push('/login')">登录</el-button>
+    <br>
     <router-link :to="{name:'search'}" style="font-weight: bold;font-size:20px;color: red">
       去购物
     </router-link>

@@ -24,6 +24,8 @@
         </div>
 
         <!--selector-->
+<!--        todo 自定义事件-->
+<!--        trademarkInfo 面包屑-->
         <SearchSelector @trademarkInfo="trademarkInfo" @attrInfo="attrInfo"/>
 
         <!--details-->
@@ -47,12 +49,13 @@
 
                   <div class="p-img">
                     <router-link :to="{
-                      name:'detail',
+                      name:'Detail',
                       params:{
                         skuid:goods.id
                       }
                     }">
-                      <img :src="goods.defaultImg" />
+<!--                      lazyload 插件提供的自定义指令-->
+                      <img v-lazy="goods.defaultImg" />
                     </router-link>
                   </div>
                   <div class="price">
@@ -62,14 +65,20 @@
                     </strong>
                   </div>
                   <div class="attr">
-                    <a target="_blank" href="item.html" title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】">{{goods.title}}</a>
+                    <router-link :to="
+                    {
+                      name:'Detail',
+                      params:{
+                        skuid:goods.id
+                      }
+                    }">{{goods.title}}</router-link>
                   </div>
 
                   <div class="commit">
                     <i class="command">已有<span>2000</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                    <a @click="addToShopCart(goods.id)" class="sui-btn btn-bordered btn-danger">加入购物车</a>
                     <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
@@ -77,6 +86,7 @@
             </ul>
           </div>
 <!--          分页器-->
+<!--           todo 自定义事件 page-changed-->
           <Pagination
               :page-no="searchParams.pageNo"
               :page-size="searchParams.pageSize"
@@ -145,6 +155,7 @@ export default {
 
     const removeKeyword = function (){
       searchParams.keyword = undefined
+      // todo 事件总线
       eventBus.emit('clear')
       searchInfoList()
       if (route.query){
@@ -215,6 +226,20 @@ export default {
       searchInfoList()
     }
 
+    // 直接加入购物车
+    // skuId == goods.id
+    const addToShopCart = async function (skuId){
+      try {
+        let result = await store.dispatch('addOrUpdateShopCart',{skuId,skuNum:1})
+        ElMessage({
+          message: '成功加入购物车.',
+          type: 'success',
+        })
+      }catch (e){
+        alert(e.message)
+      }
+    }
+
     onBeforeMount(()=>{
       Object.assign(searchParams,route.query,route.params)
     })
@@ -231,7 +256,7 @@ export default {
       searchParams.category3Id = undefined
     })
     return{
-      searchParams,removeCategoryName,removeKeyword,removeTrademark,removeProps,trademarkInfo,attrInfo,isActive,isShow,changeOrder,onPageChanged
+      searchParams,removeCategoryName,removeKeyword,removeTrademark,removeProps,trademarkInfo,attrInfo,isActive,isShow,changeOrder,onPageChanged,addToShopCart
     }
   }
 }

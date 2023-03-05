@@ -23,6 +23,7 @@ import eventBus from "@/bus/eventBus.js";
           item.isDefault = 0
         })
         el.isDefault = 1
+        // todo 事件总线
         eventBus.emit('sendIndex',index)
 //        console.log(el.id)
       }

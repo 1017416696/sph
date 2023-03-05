@@ -34,6 +34,7 @@ import {computed} from 'vue'
 const props = defineProps(['pageNo','pageSize','total','continues'])
 const totalPage = computed(()=> Math.ceil(props.total/props.pageSize))
 
+//连续的页数
 const continuePage = computed(()=>{
   let start = 0,end = 0
 
@@ -57,10 +58,11 @@ const continuePage = computed(()=>{
   return {start,end}
 })
 
-const emits = defineEmits(['pageChanged'])
+// todo 触发自定义事件
+const emit = defineEmits(['pageChanged'])
 const changePage = function (currentPage){
   console.log(currentPage)
-  emits('pageChanged',currentPage)
+  emit('pageChanged',currentPage)
 }
 
 </script>

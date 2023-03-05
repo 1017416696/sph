@@ -32,7 +32,7 @@ const addShopCart = async function (){
   try {
     await store.dispatch('addOrUpdateShopCart',{skuId: route.params.skuid,skuNum:skuNum.value})
     router.push({
-      name:'addCart',
+      name:'AddCartSuccess',
       query:{
         skuNum:skuNum.value
       }

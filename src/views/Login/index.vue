@@ -1,20 +1,69 @@
 <script setup>
-import {computed, ref} from "vue";
-import store from "@/store/index.js";
-import {useRouter} from "vue-router";
+import {ref,reactive} from "vue";
+import {useRoute, useRouter} from "vue-router";
+import {Lock,User} from "@element-plus/icons-vue";
+import {useStore} from "vuex";
+
 
 const router = useRouter()
-const username = ref('')
-const password = ref('')
+const route = useRoute()
+const store = useStore()
+//const username = ref('')
+//const password = ref('')
 //处理登陆
-const handleLogin = async function (){
-  try {
-    (username.value && password.value) && await store.dispatch('getLoginUser',{phone:username.value,password:password.value})
-    router.replace('/home')
-  }catch (e){
-    alert(e.message)
-  }
-}
+//const handleLogin = async function (){
+//  try {
+//    (username.value && password.value) && await store.dispatch('getLoginUser',{phone:username.value,password:password.value})
+//    let path = route.query.redirect ? route.query.redirect : '/home'
+//    router.push(path)
+//  }catch (e){
+//    alert(e.message)
+//  }
+//}
+
+//加载动画
+const loading = ref(false)
+//获取表单DOM 元素
+const ruleFormRef = ref(null)
+const formSize = ref('default')
+
+//表单中的数据，进行双向绑定的表单数据
+const ruleForm = reactive({
+  username:'',
+  password:''
+})
+
+//表单各字段的验证规则，<el-form-item > 标签中的 prop属性的值为该对象中的属性
+const rules = reactive({
+  username:[
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+  ],
+  password:[
+    { required: true, message: '请输入密码', trigger: 'blur' },
+  ]
+})
+
+const submitForm = async (formEl) => {
+  if (!formEl) return;
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      console.log('submit!');
+      try {
+        await store.dispatch('getLoginUser',{phone:ruleForm.username,password:ruleForm.password})
+        let path = route.query.redirect ? route.query.redirect : '/home'
+        loading.value = true
+        router.push(path)
+      }catch (e){
+        ElMessage.error('用户名或密码错误')
+      }
+    } else {
+      console.log('error submit!', fields);
+//      ElMessage.error('用户名')
+    }
+  });
+};
+
+
 </script>
 
 <template>
@@ -33,14 +82,43 @@ const handleLogin = async function (){
           </ul>
 
           <div class="content">
-            <form>
+            <el-form
+                ref="ruleFormRef"
+                :model="ruleForm"
+                :rules="rules"
+                label-width="120px"
+                class="demo-ruleForm"
+                :size="formSize"
+                status-icon
+            >
               <div class="input-text clearFix">
-                <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号" v-model="username">
+<!--                <span></span>-->
+<!--                <input type="text" placeholder="邮箱/用户名/手机号" v-model="username">-->
+<!--                验证表单数据对象中的 username 属性-->
+                <el-form-item label-width="auto" prop="username">
+                  <el-input
+                      v-model="ruleForm.username"
+                      placeholder="邮箱/用户名/手机号"
+                      autocomplete="on"
+                      name="username"
+                      :prefix-icon='User'
+                  />
+                </el-form-item>
               </div>
               <div class="input-text clearFix">
-                <span class="pwd"></span>
-                <input type="password" placeholder="请输入密码" v-model="password">
+<!--                <span class="pwd"></span>-->
+<!--                <input type="password" placeholder="请输入密码" v-model="password">-->
+                <!--                验证表单数据对象中的 password 字段-->
+                <el-form-item label-width="auto" prop="password">
+                  <el-input
+                      v-model="ruleForm.password"
+                      type="password"
+                      placeholder="请输入密码"
+                      show-password
+                      :prefix-icon='Lock'
+                      autocomplete="current-password"
+                  />
+                </el-form-item>
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -49,8 +127,15 @@ const handleLogin = async function (){
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn" @click.prevent="handleLogin">登&nbsp;&nbsp;录</button>
-            </form>
+<!--              @click="submitForm(ruleFormRef)-->
+<!--              v-loading 是否显示加载动画-->
+              <el-button class="btn" type="primary" v-loading="loading" @click="submitForm(ruleFormRef)">登录</el-button>
+            </el-form>
+
+            <div class="tips">
+              <span style="margin-right:20px;">username: 13700000000</span>
+              <span> password: 111111</span>
+            </div>
 
             <div class="call clearFix">
               <ul>

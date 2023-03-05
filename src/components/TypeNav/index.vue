@@ -17,7 +17,7 @@
         <div class="all-sort-list2" @click="goSearch">
           <div class="item" v-for="(c1,index) in categoryList" :key="c1.categoryId" :class="{cur: currentIndex == index}">
             <h3 @mouseenter="changeIndex(index)">
-              <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{c1.categoryName}}</a>
+              <a :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId" v-show="index!=16">{{c1.categoryName}}</a>
             </h3>
             <!--            二三级菜单-->
             <div class="item-list clearfix" :style="{display: currentIndex == index ? 'block' : 'none'}">

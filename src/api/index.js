@@ -87,3 +87,48 @@ export const reqGetUserInfo = ()=>request.get('/user/passport/auth/getUserInfo')
 //退出登陆
 ///api/user/passport/logout get
 export const reqUserLogout = ()=>request.get('/user/passport/logout')
+
+// 获取用户地址信息
+//    /api/user/userAddress/auth/findUserAddressList get
+export const reqGetUserAddress = ()=>request.get('/user/userAddress/auth/findUserAddressList')
+
+//
+//export const reqGetMockedAddress = ()=>mockRequest.get('/userAddress')
+
+// /api/order/auth/trade get
+// 获取订单交易页信息
+export const reqGetTradeInfo = ()=>request.get('/order/auth/trade')
+
+//提交订单
+// /api/order/auth/submitOrder?tradeNo={tradeNo} post
+/*
+* traderNo
+consignee
+consigneeTel
+deliveryAddress
+paymentWay
+orderComment
+orderDetailList
+*
+* */
+
+export const reqSubmitOrder =({tradeNo,data})=>request({
+    url:'/order/auth/submitOrder',
+    method:'post',
+    params:{
+        tradeNo:tradeNo
+    },
+    data
+})
+
+
+//获取订单支付信息
+//    /api/payment/weixin/createNative/{orderId}
+export const reqGetOrderPaymentInfo = (orderId)=>request.get(`/payment/weixin/createNative/${orderId}`)
+
+//查询订单支付状态
+export const reqGetOrderStatus = (orderId)=>request.get(`/payment/weixin/queryPayStatus/${orderId}`)
+
+//获取我的订单列表
+// /api/order/auth/{page}/{limit} get
+export const reqGetOrderList = (page,limit)=>request.get(`/order/auth/${page}/${limit}`)
