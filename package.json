@@ -18,7 +18,6 @@
     "nprogress": "^0.2.0",
     "qrcode": "^1.5.1",
     "swiper": "5",
-    "uuid": "^9.0.0",
     "vue": "^3.2.45",
     "vue-lazyload": "^3.0.0-rc.2",
     "vue-router": "^4.1.6",

@@ -4,11 +4,11 @@ import {useStore} from "vuex";
 import {useRouter} from "vue-router";
 const router = useRouter()
 const store = useStore()
-const phoneNum = ref('')
-const code = ref('')
-const password =ref('')
-const password1 = ref('')
-const isChecked = ref(true)
+//const phoneNum = ref('')
+//const code = ref('')
+//const password =ref('')
+//const password1 = ref('')
+//const isChecked = ref(true)
 
 const sendCode = computed(()=>store.state.user.code)
 
@@ -22,12 +22,17 @@ const sendCode = computed(()=>store.state.user.code)
 //    alert(error.message)
 //  }
 //}
+
+//表单 id
 const ruleFormRef = ref(null)
 
+//加载动画
 const loading = ref(false)
 
+//标签展示位置
 const labelPosition = ref('right')
 
+// 表单尺寸 large default small
 const formSize =ref('default')
 
 const countdown = ref(0)
@@ -40,7 +45,7 @@ const ruleForm = reactive({
   isChecked:false
 })
 
-//确认密码
+//自定义规则：确认密码
 const checkPassword = (rule,value,callback)=>{
   if (value !== ruleForm.password){
     callback(new Error('两次输入的密码不一致'))
@@ -48,6 +53,8 @@ const checkPassword = (rule,value,callback)=>{
     callback()
   }
 }
+
+//自定义规则：验证复选框
 const validateIsChecked = (rule,value,callback)=>{
   if (!value){
     callback(new Error('请先勾选同意协议!!!'))
@@ -153,7 +160,7 @@ const userRegister = async function (formEl){
             ref="ruleFormRef"
             :model="ruleForm"
             :rules="rules"
-            label-width="80px"
+            label-width="100px"
             class="demo-ruleForm"
             :size="formSize"
             :label-position="labelPosition"
